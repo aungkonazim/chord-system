@@ -1,1 +1,39 @@
 
+
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="js/vis.js"></script>
+  
+  <link href="css/vis.css" rel="stylesheet" type="text/css" />
+
+  <style type="text/css">
+    #mynetwork {
+      width: 1000px;
+      height: 600px;
+      border: 1px solid lightgray;
+    }
+  </style>
+</head>
+<body>
+
+<p>
+  Create a simple network with some nodes and edges.
+</p>
+
+<div id="mynetwork"></div>
+
+
+    
+<script type="text/javascript" src="js/main.js"></script>
+<button id="add_node" onclick="addnode();">ADD NODE</button> 
+<button id="del_node" onclick="delnode();" >DELETE NODE</button>
+<input id="to_delete"> 
+<button id="insert_data" onclick="insertdata();" >INSERT DATA</button>
+<input id="to_insert"> 
+<button id="lookup_data" onclick="lookupdata();" >LOOKUP KEY</button>
+<input id="to_lookup"> 
+</body>
+</html>
