@@ -27,14 +27,14 @@ function draw(nodes, nodecount, options) {
         for (var i = 0; i < nodecount; i++) {
             if (i === (nodecount - 1)) {
                 edges.push({
-                    id: id[i] * 10000,
+                    id: String(id[nodecount-1])+String(id[0]),
                     from: id[nodecount - 1],
                     to: id[0],
                     color: "yellow"
                 });
             } else {
                 edges.push({
-                    id: id[i] * 10000,
+                    id: String(id[i])+String(id[i+1]),
                     from: id[i],
                     to: id[i + 1],
                     color: "yellow"
@@ -48,6 +48,13 @@ function draw(nodes, nodecount, options) {
     
 
 }
+function draw1(nodes,edges,options){
+    var container = document.getElementById('mynetwork');
+    var data = {nodes: nodes, edges: edges};
+    network = new vis.Network(container, data, options);
+}
+
+
 
 function addnode() {
     var new_id = Math.floor(Math.random() * 10000);
@@ -65,19 +72,47 @@ function addnode() {
         });
     data_node
     nodes.sort(function(a,b) { return  a.id-b.id; });   
+    var index = id.indexOf(new_id);
+    console.log(data_node);
+    if (index==nodecount-1){
     data_node[new_id] = {};
+    }else{
+        data_node[new_id] = {};
+        
+        for (var key in data_node[id[index+1]]){
+            if(key<=new_id){
+                data_node[new_id][key] = data_node[id[index+1]][key];
+                delete data_node[id[index+1]][key];
+            }
+        }
+    }
+    console.log(data_node);
     draw(nodes, nodecount, options);
 
 }
 
 function delnode(){
-    if(nodecount>1){
+    
     var n_id = document.getElementById('to_delete').value;
     
     if (isNumeric(n_id)){
     var check_pre = 0;
     for(var i = 0; i <nodecount; i++) {
         if(id[i] == n_id) {
+           if(i==nodecount-1){
+               for (var key in data_node[id[i]]){
+                   console.log(key);
+//                   delete key in key_collection;
+                   var s = key_collection.indexOf(key);
+                   key_collection.splice(s,1);
+               }
+               delete data_node[id[nodecount-1]];
+           }else{
+               for(var key in data_node[id[i]]){
+                data_node[id[i+1]][key] = data_node[id[i]][key];
+               }
+               delete data_node[id[i]];
+           }  
            id.splice(i, 1);
            nodes.splice(i,1);
            check_pre = 1;
@@ -93,18 +128,23 @@ function delnode(){
         window.alert("Give a proper id");
     }
     
-}
+
+
 } 
 
 
 function insertdata(){
-    var item = document.getElementById('to_insert').value;
-    if(item.length>0){
-        var sum = 0;
-        for (var i = 0; i < item.length; i++) {
-            sum = sum + item.charCodeAt(i);
-        }
     
+    var item = document.getElementById('to_insert').value;
+    
+    if(item.length>0){
+            var sum = 0;
+            for (var i = 0; i < item.length; i++) {
+                sum = sum + item.charCodeAt(i);
+            }
+        
+    
+    if(sum <= id[nodecount-1]){
     if (key_collection.indexOf(sum)===-1){
         key_collection.push(sum);
         var f = binarySearch(id,sum);
@@ -115,9 +155,13 @@ function insertdata(){
 //         nodes[f[1]].color = 'red';
 //        draw(nodes1,nodecount,options);
 //        
-//        draw(nodes,nodecount,options);
+       draw(nodes,nodecount,options);
     }else{
         window.alert("this data already exists");
+        draw(nodes,nodecount,options);
+    }
+    }else{
+        window.alert("what you have entered has a key that exceeds the maximum node id so it can not be stored" + "key = "+ sum + " maximum nodeid = "+ id[nodecount-1]);
     }
     }else{
         window.alert("you have not entered anything");
@@ -126,14 +170,77 @@ function insertdata(){
         
 }
 
+function insertkey(){
+    
+    var item = document.getElementById('to_insert_key').value;
+    
+    if(item.length>0){
+            var sum = item;
+            item = "";
+        
+    
+    if(sum <= id[nodecount-1]){
+    if (key_collection.indexOf(sum)===-1){
+        key_collection.push(sum);
+        var f = binarySearch(id,sum);
+        data_node[id[f[1]]][sum] = item;
+        window.alert("Key = " + sum + " saved in node= " + id[f[1]]);    
+//        var nodes1 = JSON.parse(JSON.stringify( nodes ));;
+//        
+//         nodes[f[1]].color = 'red';
+//        draw(nodes1,nodecount,options);
+//        
+       draw(nodes,nodecount,options);
+    }else{
+        window.alert("this key already exists");
+        draw(nodes,nodecount,options);
+    }
+    }else{
+        window.alert("what you have entered has a key that exceeds the maximum node id so it can not be stored" + "key = "+ sum + " maximum nodeid = "+ id[nodecount-1]);
+    }
+    }else{
+        window.alert("you have not entered anything");
+    }
+    
+        
+}
+
+
+
+
 function lookupdata(){
     var sum = document.getElementById('to_lookup').value;
     if(sum.length>0){
+        var edges = [];
+        if(nodecount>1){
+            for (var i = 0; i < nodecount; i++) {
+                if (i === (nodecount - 1)) {
+                    edges.push({
+                        id: String(id[nodecount-1])+String(id[0]),
+                        from: id[nodecount - 1],
+                        to: id[0],
+                        
+                    });
+                } else {
+                    edges.push({
+                        id: String(id[i])+String(id[i+1]),
+                        from: id[i],
+                        to: id[i + 1],
+                        
+                    });
+                }
+            }
+        }
+        
         var check = 0;
         for (var i = 0; i < nodecount-1; i++){
+            edges[i].color = "red";
+            edges[i].arrows = "to";
+            draw1(nodes,edges,options);
             if(id[i]<sum && id[i+1]>=sum){
+                
                 if (data_node[id[i+1]][sum] != undefined){
-                    window.alert("For key = "+sum+" data is found in node = "+ id[i+1]+" with value = " + data_node[id[i+1]][sum]);
+                    document.getElementById('output').innerHTML = "For key = "+sum+" data is found in node = "+ id[i+1]+" with value = " + data_node[id[i+1]][sum];
                     check = 1;
                     break;
                 }else{
@@ -141,20 +248,23 @@ function lookupdata(){
                     check = 1;
                     break;
                 }
+                
             }            
         }
         if (check==0 && sum >= id[nodecount-1]){
             if (data_node[id[nodecount-1]][sum] != undefined){
-                    window.alert("For key = "+sum+" data is found in node = "+ id[nodecount-1]+" with value = " + data_node[id[nodecount-1]][sum]);
+                    document.getElementById('output').innerHTML = "For key = "+sum+" data is found in node = "+ id[nodecount-1]+" with value = " + data_node[id[nodecount-1]][sum];
                     }else{
                     window.alert("Data does not exist for this key");
-                    check = 1;
+                    
                 }
         }
+        
         
     }else{
         window.alert("you have not entered anything");
     }
+    
 }
 
 function isNumeric(n) {

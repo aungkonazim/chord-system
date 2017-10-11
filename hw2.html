@@ -3,7 +3,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Network | Basic usage</title>
+  <title>Chord</title>
   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="js/vis.js"></script>
   
@@ -11,8 +11,8 @@
 
   <style type="text/css">
     #mynetwork {
-      width: 1000px;
-      height: 600px;
+      width: 800px;
+      height: 500px;
       border: 1px solid lightgray;
     }
   </style>
@@ -20,9 +20,14 @@
 <body>
 
 <p>
-  Create a simple network with some nodes and edges.
+  Basic chord peer to peer system.<br>
+  Data is saved in nodes with summation of ASCII values as key <br>
+  For simplicity of grading an option of inserting key directly is given.<br>
+  Lookup will generate the key,value found and directed red edges will show the path traversed
 </p>
-
+<p id="output" style="color:red">
+    
+</p>
 <div id="mynetwork"></div>
 
 
@@ -32,8 +37,12 @@
 <button id="del_node" onclick="delnode();" >DELETE NODE</button>
 <input id="to_delete"> 
 <button id="insert_data" onclick="insertdata();" >INSERT DATA</button>
-<input id="to_insert"> 
+<input id="to_insert" placeholder="insert data here"> 
+<p></p>
+<button id="insert_key" onclick="insertkey();" >INSERT KEY</button>
+<input id="to_insert_key" placeholder="insert key here"> 
+
 <button id="lookup_data" onclick="lookupdata();" >LOOKUP KEY</button>
-<input id="to_lookup"> 
+<input id="to_lookup" > 
 </body>
 </html>
