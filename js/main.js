@@ -231,41 +231,52 @@ function lookupdata(){
                 }
             }
         }
-        
         var check = 0;
-        for (var i = 0; i < nodecount-1; i++){
-            edges[i].color = "red";
-            edges[i].arrows = "to";
-            draw1(nodes,edges,options);
-            if(id[i]<sum && id[i+1]>=sum){
-                
-                if (data_node[id[i+1]][sum] != undefined){
-                    document.getElementById('output').innerHTML = "For key = "+sum+" data is found in node = "+ id[i+1]+" with value = " + data_node[id[i+1]][sum];
+        if (data_node[id[0]][sum] != undefined){
+                    document.getElementById('output').innerHTML = "For key = "+sum+" data is found in node = "+ id[0]+" with value = " + data_node[id[0]][sum];
                     check = 1;
-                    break;
-                }else{
-                    window.alert("Data does not exist for this key");
-                    check = 1;
-                    break;
-                }
-                
-            }            
+                    
         }
-        if (check==0 && sum >= id[nodecount-1]){
+        if(check==0){
+            for (var i = 0; i < nodecount-1; i++){
+                edges[i].color = "red";
+                edges[i].arrows = "to";
+                draw1(nodes,edges,options);
+                if(id[i]<sum && id[i+1]>=sum){
+
+                    if (data_node[id[i+1]][sum] != undefined){
+                        document.getElementById('output').innerHTML = "For key = "+sum+" data is found in node = "+ id[i+1]+" with value = " + data_node[id[i+1]][sum];
+                        check = 1;
+                        break;
+                    }else{
+                        window.alert("Data does not exist for this key");
+                        check = 1;
+                        break;
+                    }
+
+                }            
+            }
+        }
+        if (check==0 && sum <= id[nodecount-1] ){
             if (data_node[id[nodecount-1]][sum] != undefined){
                     document.getElementById('output').innerHTML = "For key = "+sum+" data is found in node = "+ id[nodecount-1]+" with value = " + data_node[id[nodecount-1]][sum];
                     }else{
+//                    edges[nodecount-1].color = "red";
+//                    edges[nodecount-1].arrows = "to";
+    
                     window.alert("Data does not exist for this key");
                     
                 }
         }
-        
+    
+     
         
     }else{
         window.alert("you have not entered anything");
     }
     
 }
+
 
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
