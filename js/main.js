@@ -211,6 +211,7 @@ function insertkey(){
 function lookupdata(){
     var sum = document.getElementById('to_lookup').value;
     if(sum.length>0){
+        
         var edges = [];
         if(nodecount>1){
             for (var i = 0; i < nodecount; i++) {
@@ -249,6 +250,7 @@ function lookupdata(){
                         check = 1;
                         break;
                     }else{
+                        
                         window.alert("Data does not exist for this key");
                         check = 1;
                         break;
@@ -260,17 +262,21 @@ function lookupdata(){
         if (check==0 && sum <= id[nodecount-1] ){
             if (data_node[id[nodecount-1]][sum] != undefined){
                     document.getElementById('output').innerHTML = "For key = "+sum+" data is found in node = "+ id[nodecount-1]+" with value = " + data_node[id[nodecount-1]][sum];
+                    check=1;
                     }else{
 //                    edges[nodecount-1].color = "red";
 //                    edges[nodecount-1].arrows = "to";
-    
+                   
                     window.alert("Data does not exist for this key");
                     
                 }
         }
+        if(check==0){
+            window.alert("Data does not exist for this key");
+        }
     
      
-        
+          
     }else{
         window.alert("you have not entered anything");
     }
